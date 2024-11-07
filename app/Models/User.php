@@ -12,9 +12,9 @@ class User extends BaseUuidUser
     use HasApiTokens;
 
     protected $fillable = [
+        'username',
+        'phone_number',
         'name',
-        'email',
-        'password',
     ];
 
     protected $hidden = [
@@ -22,21 +22,20 @@ class User extends BaseUuidUser
         'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    public function setEmailAttribute(string $value): void
-    {
-        $this->attributes['email'] = strtolower($value);
-    }
-
     public function getRules(): array
     {
         return [
-            'email'     => 'required|email|unique:users,email,' . $this->id,
+            'username' => 'required|string|unique:users,username,' . $this->id,
+            'phone_number' => 'required|string|unique:users,phone_number,' . $this->id,
             'password'  => 'required|string|min:6',
             'name'      => 'required|string',
         ];
+    }
+
+    public function findForPassport(string $username): User
+    {
+        return $this->where('username', $username)
+            ->orWhere('phone_number', $username)
+            ->first();
     }
 }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Traits\ThrottlesAttempts;
 use App\Http\Helpers\RequestHelper;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +14,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Exceptions\OAuthServerException;
@@ -48,8 +46,9 @@ class AuthController extends AccessTokenController
     /**
      * Register
      *
+     * @bodyParam username string required Example: paul33
+     * @bodyParam phone_number string required Example: 088123123123
      * @bodyParam name string required Example: Paul
-     * @bodyParam email string required Example: paul@gmail.com
      * @bodyParam password string required Example: paul123
      * @bodyParam password_confirmation string required Example: paul123
      */
@@ -58,8 +57,9 @@ class AuthController extends AccessTokenController
         $body = $request->getParsedBody();
 
         $validator = validator($body, [
+            'username' => 'required|string|unique:users,username',
+            'phone_number' => 'required|string|unique:users,phone_number',
             'name' => 'required|string',
-            'email' => 'required|email:rfc,dns',
             'password' => ['required', Password::min(6)->letters()->numbers(), 'confirmed'],
         ]);
 
@@ -77,10 +77,8 @@ class AuthController extends AccessTokenController
 
         DB::beginTransaction();
         try {
-            // Email Auto Verified (no verification email flow now)
             $user = new User($body);
             $user->password = Hash::make($body['password']);
-            $user->email_verified_at = Carbon::now();
             $user->save();
 
             DB::commit();
@@ -97,7 +95,7 @@ class AuthController extends AccessTokenController
     /**
      * Login
      *
-     * @bodyParam email string required Example: jake
+     * @bodyParam username string required Example: paul33
      * @bodyParam password string required Example: myevent
      */
     public function login(Request $request_http): array
@@ -106,7 +104,7 @@ class AuthController extends AccessTokenController
 
         $request = RequestHelper::createServerRequest($request_http);
         $body = $request->getParsedBody();
-        $body['username'] = $body['email'];
+        $body['username'] = $body['username'];
         $body['client_id'] = config('passport.clients.users.id');
         $body['client_secret'] = config('passport.clients.users.secret');
         $body['grant_type'] = 'password';
@@ -161,15 +159,15 @@ class AuthController extends AccessTokenController
     /**
      * Update Profile
      *
-     * @bodyParam name string required Example: test
-     * @bodyParam email string required Example: jake@gmail.com
+     * @bodyParam username string required Example: test
+     * @bodyParam name string required Example: jake
      */
     public function updateProfile(Request $request): JsonResponse
     {
         $user = auth()->user();
         $input = $request->validate([
+            'username' => 'required|string|unique:users,username,' . $user->id,
             'name' => 'required|string',
-            'email' => ['required', 'email:rfc,dns', Rule::unique('users', 'email')->ignoreModel($user)],
         ]);
 
         $user->fill($input);
@@ -255,7 +253,7 @@ class AuthController extends AccessTokenController
     private function checkUserExists(array $input): ?User
     {
         try {
-            return User::where('email', $input['email'])->firstOrFail();
+            return User::where('phone_number', $input['phone_number'])->firstOrFail();
         } catch (Exception) {
             return null;
         }
