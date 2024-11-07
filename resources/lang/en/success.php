@@ -8,9 +8,5 @@ return [
     'update_profile_success' => 'Update profile success.',
     'register_success' => 'Register success.',
 
-    'store_event_success' => 'Store event success.',
-    'update_event_success' => 'Update event success.',
-    'delete_event_success' => 'Delete event success.',
-
-    'import_data_success' => 'Import data success.',
+    'store_contact_success' => 'Store contact success.',
 ];

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Abstract\BaseUuidUser;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
@@ -32,10 +33,15 @@ class User extends BaseUuidUser
         ];
     }
 
-    public function findForPassport(string $username): User
+    public function findForPassport(string $username): ?User
     {
         return $this->where('username', $username)
             ->orWhere('phone_number', $username)
             ->first();
+    }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(Contact::class);
     }
 }

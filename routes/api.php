@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(static function () {
@@ -16,4 +17,6 @@ Route::middleware('auth:api')->group(function () {
         Route::post('change-password', [AuthController::class, 'changePassword'])->name('auth.change-password');
         Route::patch('update-profile', [AuthController::class, 'updateProfile'])->name('auth.update-profile');
     });
+
+    Route::apiResource('contacts', ContactController::class)->only('index', 'store');
 });

@@ -6,4 +6,6 @@ return [
     'incorrect_refresh_token'    => 'The provided refresh token is incorrect.',
     'logout_failed'              => 'Failed to logout.',
     'register_fail_email_exists' => 'Register failed, email already exists.',
+
+    'duplicate_contact' => 'Contact already exists.',
 ];
