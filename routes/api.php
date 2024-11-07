@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +20,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::apiResource('contacts', ContactController::class)->only('index', 'store');
+
+    Route::apiResource('chat-rooms', ChatRoomController::class);
+    Route::post('chat-rooms/{chatRoom}/{action}', [ChatRoomController::class, 'action'])->name('chat-rooms.action');
 });

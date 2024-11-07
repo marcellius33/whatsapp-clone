@@ -8,4 +8,7 @@ return [
     'register_fail_email_exists' => 'Register failed, email already exists.',
 
     'duplicate_contact' => 'Contact already exists.',
+    'invalid_action' => 'Invalid action.',
+    'already_join_chat_room' => 'Already joined chat room!',
+    'room_is_full' => 'Room is full!',
 ];

@@ -46,7 +46,7 @@ class ContactController extends Controller
      * Add
      *
      * @bodyParam username string required Example: paul
-     * @bodyparam phone_number string required Exmaple: 081231231
+     * @bodyparam phone_number string required Example: 081231231
      * @throws Exception
      */
     public function store(StoreContactRequest $request): JsonResponse

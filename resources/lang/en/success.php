@@ -9,4 +9,9 @@ return [
     'register_success' => 'Register success.',
 
     'store_contact_success' => 'Store contact success.',
+
+    'store_chat_room_success' => 'Store chat room success.',
+    'update_chat_room_success' => 'Update chat room success.',
+    'delete_chat_room_success' => 'Delete chat room success.',
+    'action_chat_room_success' => ':action chat room success.',
 ];
