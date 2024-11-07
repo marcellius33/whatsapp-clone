@@ -7,8 +7,10 @@ use App\Http\Requests\StoreChatRoomRequest;
 use App\Http\Requests\UpdateChatRoomRequest;
 use App\Http\Resources\ChatRoomCollection;
 use App\Http\Resources\ChatRoomResource;
+use App\Http\Resources\MessageCollection;
 use App\Models\ChatRoom;
 use App\QueryBuilders\ChatRoomQueryBuilder;
+use App\QueryBuilders\MessageQueryBuilder;
 use App\Services\ChatRoomService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -23,6 +25,7 @@ class ChatRoomController extends Controller
     public function __construct(
         private ChatRoomQueryBuilder $chatRoomQueryBuilder,
         private ChatRoomService $chatRoomService,
+        private MessageQueryBuilder $messageQueryBuilder,
     ) {
 
     }
@@ -147,5 +150,18 @@ class ChatRoomController extends Controller
                 'action' => ucfirst($action),
             ]),
         ]);
+    }
+
+    /**
+     * Messages
+     *
+     * @urlParam id string required Example: xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx
+     */
+    public function messages(ChatRoom $chatRoom, Request $request): MessageCollection
+    {
+        $data = $this->messageQueryBuilder->getQueryBuilder($chatRoom);
+
+        return (new MessageCollection($data->paginate(RequestHelper::limit($request))))
+            ->additional($this->messageQueryBuilder->getResource($request));
     }
 }

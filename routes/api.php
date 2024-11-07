@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(static function () {
@@ -23,4 +24,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('chat-rooms', ChatRoomController::class);
     Route::post('chat-rooms/{chatRoom}/{action}', [ChatRoomController::class, 'action'])->name('chat-rooms.action');
+    Route::get('chat-room/{chatRoom}/messages', [ChatRoomController::class, 'messages'])->name('chat-rooms.messages');
+
+    Route::apiResource('message', MessageController::class)->only('store');
 });

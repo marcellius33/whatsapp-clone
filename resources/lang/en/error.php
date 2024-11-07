@@ -11,4 +11,5 @@ return [
     'invalid_action' => 'Invalid action.',
     'already_join_chat_room' => 'Already joined chat room!',
     'room_is_full' => 'Room is full!',
+    'not_a_member' => 'Not a room member!',
 ];

@@ -14,4 +14,6 @@ return [
     'update_chat_room_success' => 'Update chat room success.',
     'delete_chat_room_success' => 'Delete chat room success.',
     'action_chat_room_success' => ':action chat room success.',
+
+    'store_message_success' => 'Store message success.',
 ];
