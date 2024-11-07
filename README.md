@@ -23,6 +23,7 @@
 ## Note
 
 1. To generate API Docs, run `php artisan scribe:generate` and access the docs in `{baseUrl}/docs` or `{baseUrl}/docs.postman` for postman collection
+2. To run websocket, run `php artisan reverb:start`
 
 # ERD
 

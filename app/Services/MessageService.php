@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Events\MessageSent;
+use App\Models\ChatRoom;
 use App\Models\ChatRoomMember;
 use App\Models\Message;
 use App\Models\User;
@@ -21,5 +23,7 @@ class MessageService
         $message->sent_at = Carbon::now();
         $message->read = false;
         $message->save();
+
+        broadcast(new MessageSent(ChatRoom::find($input['chat_room_id'])));
     }
 }
